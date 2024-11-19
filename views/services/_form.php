@@ -1,21 +1,23 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
-/** @var yii\web\View $this */
-/** @var app\models\Services $model */
-/** @var yii\widgets\ActiveForm $form */
 ?>
 
 <div class="services-form">
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?php $form = ActiveForm::begin(); ?>
-
-    <!-- Name Field -->
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'slogan')->textInput(['maxlength' => true]) ?>
+    <?php if (!empty($model->header_image)): ?>
+    <div class="form-group">
+        <label>Imagen de portada</label>
+        <div>
+            <img src="data:image/jpeg;base64,<?= $model->header_image ?>" style="max-width: 300px;">
+        </div>
+    </div>
+    <?php endif; ?>
+    <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*']) ?>
 
-    <!-- Description Field -->
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
     <div class="form-group row">
@@ -46,6 +48,8 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'address')->textInput(['id' => 'address', 'class' => 'form-control', 'readonly' => true])->label(false) ?>
     </div>
 
+   
+
     <div id="map" style="height: 400px; width: 80%;"></div>
 
     <div class="form-group">
@@ -53,7 +57,6 @@ use yii\widgets\ActiveForm;
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />

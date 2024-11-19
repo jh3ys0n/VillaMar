@@ -1,56 +1,54 @@
 <?php
-
 namespace app\models;
 
-use Yii;
+use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
 
-/**
- * This is the model class for table "services".
- *
- * @property int $id
- * @property string $name
- * @property string|null $description
- * @property string|null $phone
- * @property string|null $email
- * @property string|null $facebook
- * @property string|null $address
- */
-class Services extends \yii\db\ActiveRecord
+class Services extends \yii\db\ActiveRecord 
 {
     /**
-     * {@inheritdoc}
+     * @var UploadedFile
      */
+    public $imageFile;
+
     public static function tableName()
     {
         return 'services';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['description'], 'string'],
-            [['name'], 'string', 'max' => 100],
+            [['description', 'header_image'], 'string'],
+            [['name','slogan'], 'string', 'max' => 100],
             [['phone', 'email', 'facebook', 'address'], 'string', 'max' => 250],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'slogan' => 'Slogan',
             'description' => 'Description',
             'phone' => 'Phone',
             'email' => 'Email',
             'facebook' => 'Facebook',
             'address' => 'Address',
+            'header_image' => 'Header Image',
+            'imageFile' => 'Header Image File',
         ];
+    }
+
+    public function upload()
+    {
+        if ($this->imageFile) {
+            // Leer el archivo y convertirlo a base64
+            $imageData = file_get_contents($this->imageFile->tempName);
+            $this->header_image = base64_encode($imageData);
+            return true;
+        }
     }
 }

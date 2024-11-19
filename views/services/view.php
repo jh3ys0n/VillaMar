@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -15,42 +14,47 @@ preg_match('/\((-?\d+\.\d+), (-?\d+\.\d+)\)/', $model->address, $matches);
 $lat = $matches[1] ?? -21.755026371088526;
 $lng = $matches[2] ?? -67.48056875985749;
 $popupText = $model->address ? Html::encode($model->address) : 'Dirección no disponible';
+
+// Preparar la URL de la imagen de fondo
+$backgroundImage = $model->header_image ? 
+    "data:image/jpeg;base64,{$model->header_image}" : 
+    \yii\helpers\Url::to('@web/assets/img/background_img2.jpeg');
 ?>
 
 <div class="services-view">
     <div style="position: relative; height: 700px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); width: 100vw; margin-left: calc(50% - 50vw);">
 
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('<?= \yii\helpers\Url::to('@web/assets/img/background_img2.jpeg') ?>'); background-size: cover; background-position: center; opacity: 0.90;"></div>
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('<?= $backgroundImage ?>'); background-size: cover; background-position: center; opacity: 0.90;"></div>
         
         <div style="position: relative; z-index: 1; text-align: center;">
             <h1 class='responsive'>
                 <?= Html::encode($model->name) ?>
             </h1>
-            <p style="font-size: 24px; margin-bottom: 20px;">Un abrazo en la inmensidad</p>
+            <p ><?= Html::encode($model->slogan) ?></p>
             <?= Html::a('Ver Servicios', ['index'], ['class' => 'custom-button']) ?>
         </div>
     </div>
 
     <div style="margin-top: 20px; text-align: center;">
-    <h2>Contact Information</h2>
-    <ul style="list-style: none; padding-left: 0; display: flex; justify-content: center; align-items: center; gap: 20px;">
-        <li>
-            <a href="https://wa.me/<?= Html::encode($model->phone) ?>" target="_blank">
-                <img src="<?= \yii\helpers\Url::to('@web/assets/img/icons/whatsapp.png') ?>" alt="WhatsApp" style="width: 60px; height: 60px;">
-            </a>
-        </li>
-        <li>
-            <a href="mailto:<?= Html::encode($model->email) ?>">
-                <img src="<?= \yii\helpers\Url::to('@web/assets/img/icons/gmail.png') ?>" alt="Email" style="width: 55px; height: 55px;">
-            </a>
-        </li>
-        <li>
-            <a href="<?= Html::encode($model->facebook) ?>" target="_blank">
-                <img src="<?= \yii\helpers\Url::to('@web/assets/img/icons/fb.png') ?>" alt="Facebook" style="width: 60px; height: 60px;">
-            </a>
-        </li>
-    </ul>
-</div>
+        <h2>Contact Information</h2>
+        <ul style="list-style: none; padding-left: 0; display: flex; justify-content: center; align-items: center; gap: 20px;">
+            <li>
+                <a href="https://wa.me/<?= Html::encode($model->phone) ?>" target="_blank">
+                    <img src="<?= \yii\helpers\Url::to('@web/assets/img/icons/whatsapp.png') ?>" alt="WhatsApp" style="width: 60px; height: 60px;">
+                </a>
+            </li>
+            <li>
+                <a href="mailto:<?= Html::encode($model->email) ?>">
+                    <img src="<?= \yii\helpers\Url::to('@web/assets/img/icons/gmail.png') ?>" alt="Email" style="width: 55px; height: 55px;">
+                </a>
+            </li>
+            <li>
+                <a href="<?= Html::encode($model->facebook) ?>" target="_blank">
+                    <img src="<?= \yii\helpers\Url::to('@web/assets/img/icons/fb.png') ?>" alt="Facebook" style="width: 60px; height: 60px;">
+                </a>
+            </li>
+        </ul>
+    </div>
 
     <h2>Ubicación</h2>
     <div id="map" style="height: 400px; width: 100%;"></div>
