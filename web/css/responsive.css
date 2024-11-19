@@ -1,0 +1,33 @@
+/* responsive.css */
+
+.services-view h1 {
+    font-size: 100px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.services-view p {
+    font-size: 24px;
+    color: white;
+    text-align: center;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .services-view h1 {
+        font-size: 80px;
+    }
+    .services-view p {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .services-view h1 {
+        font-size: 60px;
+    }
+    .services-view p {
+        font-size: 12px;
+    }
+}

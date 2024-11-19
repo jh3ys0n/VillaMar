@@ -29,7 +29,18 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+ 
+    <?php
+    $this->registerCssFile('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@300;600&family=Lora:wght@400;700&display=swap', ['rel' => 'stylesheet']);
+    ?>
+    <?php
+    $this->registerCssFile('@web/css/custom.css', ['depends' => [\yii\web\YiiAsset::class]]);
+    ?>
+    <?php
+    $this->registerCssFile('@web/css/responsive.css', ['depends' => [\yii\web\YiiAsset::class]]);
+    ?>
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">
@@ -74,7 +85,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <?= $content ?>
     </div>
 </main>
-
 <footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
         <div class="row text-muted">

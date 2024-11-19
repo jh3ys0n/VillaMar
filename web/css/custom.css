@@ -1,0 +1,16 @@
+.custom-button {
+    font-size: 18px;
+    background-color: #003049; /* Rojo */
+    color: white; /* Letras blancas */
+    border: 2px solid #003049; /* Borde rojo */
+    padding: 10px 40px; /* Espaciado interno */
+    border-radius: 6px; /* Bordes redondeados */
+    text-decoration: none; /* Quitar subrayado */
+    transition: background-color 0.3s, color 0.3s; /* Animación suave */
+}
+
+.custom-button:hover {
+    background-color: white; /* Fondo blanco */
+    color: #003049; /* Letras rojas */
+    border-color: #003049; /* Mantener borde rojo */
+}

@@ -19,7 +19,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
     <div class="form-group row">
-        <!-- Phone Field -->
         <div class="col-md-4">
             <label for="phone">Phone</label>
             <?= $form->field($model, 'phone')->input('text', [
@@ -28,7 +27,6 @@ use yii\widgets\ActiveForm;
             ])->label(false) ?>
         </div>
 
-        <!-- Email Field -->
         <div class="col-md-4">
             <label for="email">Email</label>
             <?= $form->field($model, 'email')->input('email', [
@@ -37,14 +35,12 @@ use yii\widgets\ActiveForm;
             ])->label(false) ?>
         </div>
 
-        <!-- Facebook Field -->
         <div class="col-md-4">
             <label for="facebook">Facebook</label>
             <?= $form->field($model, 'facebook')->textInput(['maxlength' => true])->label(false) ?>
         </div>
     </div>
 
-    <!-- Address Field with OpenStreetMap -->
     <div class="form-group">
         <label for="address">Address</label>
         <?= $form->field($model, 'address')->textInput(['id' => 'address', 'class' => 'form-control', 'readonly' => true])->label(false) ?>
@@ -91,9 +87,21 @@ use yii\widgets\ActiveForm;
         let map;
         let marker;
         let selectedLatLng;
+        const addressValue = document.getElementById('address').value.trim(); 
+        let initialLocation;
 
-        const initialLocation = [-21.7541055631944, -67.4814705752597]; 
+        if (addressValue.startsWith('(') && addressValue.endsWith(')')) {
+            const coords = addressValue.slice(1, -1).split(',').map(coord => parseFloat(coord.trim()));
+            if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+                initialLocation = coords; 
+            } else {
+                initialLocation = [-21.7541055631944, -67.4814705752597]; 
+            }
+        } else {
+            initialLocation = [-21.7541055631944, -67.4814705752597]; 
+        }
 
+       
         map = L.map('map').setView(initialLocation, 17); 
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
