@@ -4,7 +4,7 @@ namespace app\models;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 
-class Services extends \yii\db\ActiveRecord 
+class Services extends \yii\db\ActiveRecord
 {
     /**
      * @var UploadedFile
@@ -45,10 +45,15 @@ class Services extends \yii\db\ActiveRecord
     public function upload()
     {
         if ($this->imageFile) {
-            // Leer el archivo y convertirlo a base64
+            // Read the file and convert to base64
             $imageData = file_get_contents($this->imageFile->tempName);
             $this->header_image = base64_encode($imageData);
             return true;
         }
+    }
+
+    public function getGalleryImages()
+    {
+        return $this->hasMany(Image::class, ['id_services' => 'id'])->where(['type' => 'gallery']);
     }
 }
