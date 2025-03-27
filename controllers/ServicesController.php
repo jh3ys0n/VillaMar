@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use app\controllers\ImageController;
 use app\models\Image;
+use app\models\Plans;
 /**
  * ServicesController implements the CRUD actions for Services model.
  */
@@ -98,7 +99,6 @@ class ServicesController extends Controller
     
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                // Handle header image upload
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 
                 if ($model->imageFile) {
@@ -106,9 +106,8 @@ class ServicesController extends Controller
                 }
                 
                 if ($model->save()) {
-                    // Handle gallery images
+
                     $this->saveGalleryImages($model);
-                    
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             }
@@ -119,13 +118,12 @@ class ServicesController extends Controller
         ]);
     }
     
+    
     protected function saveGalleryImages($model)
     {
-        // Handle existing images (remove those not in the form)
         $existingImageIds = Yii::$app->request->post('ExistingImages', []);
         $existingIds = array_column($existingImageIds, 'id');
         
-        // Remove images not in the existing list
         Image::deleteAll([
             'AND', 
             ['id_services' => $model->id],
@@ -144,6 +142,52 @@ class ServicesController extends Controller
             $image->save();
         }
     }
+
+    protected function saveWithPlans($serviceModel, $plansData)
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (!$serviceModel->save()) {
+                Yii::error('Failed to save service: ' . json_encode($serviceModel->errors));
+                return false;
+            }
+
+            Plans::deleteAll(['id_service' => $serviceModel->id]);
+            if (!empty($plansData)) {
+                foreach ($plansData as $planData) {
+                    if (empty($planData['name'])) {
+                        continue;
+                    }
+                    $plan = new Plans();
+                    $plan->attributes = $planData;
+                    $plan->id_service = $serviceModel->id;
+                    $plan->created_at = date('Y-m-d H:i:s');
+                    $plan->updated_at = date('Y-m-d H:i:s');
+
+                    $plan->imageFile = UploadedFile::getInstance($plan, "Plans[{$plan->id_service}][imageFile]");
+                    
+                    if ($plan->imageFile) {
+                        $plan->upload();
+                    }
+                    
+                    if (!$plan->save()) {
+                        Yii::error('Failed to save plan: ' . json_encode($plan->errors));
+                        $transaction->rollBack();
+                        return false;
+                    }
+                }
+            }
+    
+            $transaction->commit();
+            return true;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            Yii::error('Error in saveWithPlans: ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+    
     /**
      * Deletes an existing Services model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

@@ -3,8 +3,10 @@ namespace app\models;
 
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
+use app\models\Image;
+use app\models\Plans;
 
-class Services extends \yii\db\ActiveRecord
+class Services extends \yii\db\ActiveRecord 
 {
     /**
      * @var UploadedFile
@@ -50,10 +52,16 @@ class Services extends \yii\db\ActiveRecord
             $this->header_image = base64_encode($imageData);
             return true;
         }
+        return false;
     }
 
     public function getGalleryImages()
     {
         return $this->hasMany(Image::class, ['id_services' => 'id'])->where(['type' => 'gallery']);
+    }
+
+    public function getPlans()
+    {
+        return $this->hasMany(Plans::class, ['id_service' => 'id']);
     }
 }

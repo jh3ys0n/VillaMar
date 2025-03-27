@@ -32,6 +32,13 @@ $config = [
             // send all mails to a file by default.
             'useFileTransport' => true,
         ],
+        'ckeditor' => [
+            'class' => 'mihaildev\ckeditor\CKEditor',
+            'editorOptions' => [
+                'preset' => 'full', // standard, basic, full
+                'inline' => false, // or true, si quieres usar CKEditor inline
+            ],
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -47,6 +54,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+               'plans/create/<id:\d+>' => 'plans/create',      
             ],
         ],
      
